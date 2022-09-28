@@ -1,0 +1,20 @@
+# replace the bits in [] with the correct values
+# run with docker-compose up --build
+version: "3" # schema version
+services:
+  postgres:
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_PASSWORD: hallo
+    ports:
+      - "5432:5432"
+    volumes:
+      - './init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql'
+  flask:
+    build: .
+    ports:
+      - "8080:5000"
+    environment:
+      PG_PASSWORD: hallo
+    depends_on:
+    - postgres
